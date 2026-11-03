@@ -52,6 +52,10 @@ router bgp {{ network_underlay_asn }}
   neighbor PEERS remote-as external
   neighbor PEERS timers 3 9
   neighbor PEERS advertisement-interval 5
+{# FRR shows a profile as both lines in its running config.  Write both, or
+   frr-reload sees the plain one as extra and sends "no neighbor PEERS bfd",
+   which tears down the BFD sessions and with them every BGP session. #}
+  neighbor PEERS bfd
   neighbor PEERS bfd profile UNDERLAY
   neighbor PEERS capability extended-nexthop
 {# Unnumbered sessions run over IPv6 link-local, so an IPv4 source would break them. #}
